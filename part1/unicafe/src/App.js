@@ -17,6 +17,8 @@ const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
+  const average = ( good - bad ) / ( good + neutral + bad );
+  const positiveRate = ( good / ( good + neutral + bad ) ) * 100;
 
   const increment = (value, setValue) => () => {
     setValue(value + 1);
@@ -32,6 +34,8 @@ const App = () => {
       <Value type="good" value={good} />
       <Value type="neutral" value={neutral} />
       <Value type="bad" value={bad} />
+      <Value type="average" value={average} />
+      <Value type="positive" value={positiveRate + "%"} />
     </div>
   )
 }
