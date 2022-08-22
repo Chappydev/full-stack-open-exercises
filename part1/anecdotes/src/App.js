@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
-const Button = ({ onClick }) => {
+const Button = ({ onClick, text }) => {
   return (
     <button onClick={onClick}>
-      New Anecdote
+      {text}
     </button>
   )
 }
@@ -17,20 +17,32 @@ const App = () => {
     'Premature optimization is the root of all evil.',
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.'
-  ]
+  ];
+
+  const [votes, setVotes] = useState(new Uint8Array(anecdotes.length));
    
-  const [selected, setSelected] = useState(0)
+  const [selected, setSelected] = useState(0);
   
   const setRandomAnecdote = (arr) => {
     setSelected(Math.floor(Math.random() * anecdotes.length));
   } 
+
+  const addVote = () => {
+    const votesCopy = [...votes];
+    votesCopy[selected] += 1;
+    setVotes(votesCopy);
+  }
 
   return (
     <div>
       <div>
         {anecdotes[selected]}
       </div>
-      <Button onClick={setRandomAnecdote} />
+      <div>
+        This anecdote has {votes[selected]} votes
+      </div>
+      <Button onClick={setRandomAnecdote} text="Next Anecdote" />
+      <Button onClick={addVote} text="Vote" />
     </div>
   )
 }
