@@ -25,16 +25,23 @@ const App = () => {
   
   const setRandomAnecdote = (arr) => {
     setSelected(Math.floor(Math.random() * anecdotes.length));
-  } 
+  };
 
   const addVote = () => {
     const votesCopy = [...votes];
     votesCopy[selected] += 1;
     setVotes(votesCopy);
-  }
+  };
+
+  const findHighestVotesIndex = () => {
+    return votes.reduce((prevInd, curr, currInd) => {
+      return votes[prevInd] < curr ? currInd : prevInd;
+    })
+  };
 
   return (
     <div>
+      <h2>All Anecdotes</h2>
       <div>
         {anecdotes[selected]}
       </div>
@@ -43,6 +50,13 @@ const App = () => {
       </div>
       <Button onClick={setRandomAnecdote} text="Next Anecdote" />
       <Button onClick={addVote} text="Vote" />
+      <h2>Anecdote with Most Votes</h2>
+      <div>
+        {anecdotes[findHighestVotesIndex()]}
+      </div>
+      <div>
+        With {votes[findHighestVotesIndex()]} votes
+      </div>
     </div>
   )
 }
