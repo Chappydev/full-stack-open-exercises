@@ -7,7 +7,7 @@ const Course = ({ course }) => {
     <div>
       <Header text={course.name} />
       <Content parts={course.parts} />
-      <Total sum={course.parts.reduce((prev, cur) => {return prev + cur.exercises}, 0)} />
+      <Total sum={course.parts.reduce((prev, cur) => { return prev + cur.exercises }, 0)} />
     </div>
   )
 }
