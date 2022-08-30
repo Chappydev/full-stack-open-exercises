@@ -27,7 +27,22 @@ const App = () => {
   const handleFormSubmit = e => {
     e.preventDefault();
     if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already in the phonebook`);
+      if (window.confirm(`${newName} is already in the phonebook. Do you want to replace the old number with a new one?`)) {
+        const existingPerson = persons.find(person => person.name === newName);
+        const newPerson = {...existingPerson, number: newNumber};
+        personsService
+          .updateNumber(existingPerson.id, newPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map((person) => {
+              return person.id !== returnedPerson.id ? person : returnedPerson;
+            }))
+          })
+          .catch(err => {
+            alert("Edit failed");
+            console.error(err.message);
+          })
+      }
+      
       return;
     }
 
@@ -42,7 +57,7 @@ const App = () => {
         alert("Failed to add new person");
         console.error(err.message);
       })
-    
+
   }
 
   const deletePerson = obj => () => {
@@ -63,19 +78,19 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter 
-        filterText={filterText} 
-        setFilterText={setFilterText} 
-        onChange={handleInputChange} 
+      <Filter
+        filterText={filterText}
+        setFilterText={setFilterText}
+        onChange={handleInputChange}
       />
       <h3>Add New</h3>
-      <PersonForm 
-        newName={newName} 
+      <PersonForm
+        newName={newName}
         setNewName={setNewName}
-        newNumber={newNumber} 
+        newNumber={newNumber}
         setNewNumber={setNewNumber}
-        onChange={handleInputChange} 
-        onClick={handleFormSubmit} 
+        onChange={handleInputChange}
+        onClick={handleFormSubmit}
       />
       <h3>Numbers</h3>
       <Persons persons={persons} filterText={filterText} onClick={deletePerson} />
