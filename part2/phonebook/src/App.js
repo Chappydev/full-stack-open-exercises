@@ -37,6 +37,17 @@ const App = () => {
     
   }
 
+  const deletePerson = obj => () => {
+    if (window.confirm(`Are you sure you want to delete ${obj.name}`)) {
+      personsService
+        .deleteAtId(obj.id)
+        .then(res => {
+          console.log(res);
+          setPersons(persons.filter(person => person !== obj));
+        })
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -55,7 +66,7 @@ const App = () => {
         onClick={handleFormSubmit} 
       />
       <h3>Numbers</h3>
-      <Persons persons={persons} filterText={filterText} />
+      <Persons persons={persons} filterText={filterText} onClick={deletePerson} />
     </div>
   )
 }
