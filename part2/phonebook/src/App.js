@@ -3,12 +3,15 @@ import personsService from './services/persons';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
+import Notification from './components/Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterText, setFilterText] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     personsService
@@ -17,7 +20,11 @@ const App = () => {
         setPersons(initialPersons);
       })
       .catch(err => {
-        alert("Failed to receive persons from the server");
+        setIsError(true);
+        setNotificationMessage('Could not get phonebook data from server');
+        setTimeout(() => {
+          setNotificationMessage('');
+        }, 4000);
         console.error(err.message);
       })
   }, [])
@@ -36,9 +43,18 @@ const App = () => {
             setPersons(persons.map((person) => {
               return person.id !== returnedPerson.id ? person : returnedPerson;
             }))
+            setIsError(false);
+            setNotificationMessage(`Successfully updated ${returnedPerson.name}'s number`);
+            setTimeout(() => {
+              setNotificationMessage('');
+            }, 4000);
           })
           .catch(err => {
-            alert("Edit failed");
+            setIsError(true);
+            setNotificationMessage('That person has already been removed from the server');
+            setTimeout(() => {
+              setNotificationMessage('');
+            }, 4000);
             console.error(err.message);
           })
       }
@@ -52,9 +68,18 @@ const App = () => {
       .create(newPerson)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson));
+        setIsError(false);
+        setNotificationMessage(`Successfully added ${returnedPerson.name}`);
+        setTimeout(() => {
+          setNotificationMessage('');
+        }, 4000);
       })
       .catch(err => {
-        alert("Failed to add new person");
+        setIsError(false);
+        setNotificationMessage('Failed to add person to the server');
+        setTimeout(() => {
+          setNotificationMessage('');
+        }, 4000);
         console.error(err.message);
       })
 
@@ -65,7 +90,6 @@ const App = () => {
       personsService
         .deleteAtId(obj.id)
         .then(res => {
-          console.log(res);
           setPersons(persons.filter(person => person !== obj));
         })
         .catch(err => {
@@ -78,6 +102,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} isError={isError} />
       <Filter
         filterText={filterText}
         setFilterText={setFilterText}
