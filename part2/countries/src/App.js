@@ -5,7 +5,6 @@ import SearchResults from './components/SearchResults';
 function App() {
   const [countries, setCountries] = useState([]);
   const [searchText, setSearchText] = useState('');
-  // console.log(countryMatches, countryMatches.map(country => country.name.common), searchText);
 
   useEffect(() => {
     axios
