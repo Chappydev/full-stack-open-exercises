@@ -16,6 +16,10 @@ const App = () => {
       .then(initialPersons => {
         setPersons(initialPersons);
       })
+      .catch(err => {
+        alert("Failed to receive persons from the server");
+        console.error(err.message);
+      })
   }, [])
 
   const handleInputChange = callback => e => callback(e.target.value);
@@ -34,6 +38,10 @@ const App = () => {
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson));
       })
+      .catch(err => {
+        alert("Failed to add new person");
+        console.error(err.message);
+      })
     
   }
 
@@ -44,6 +52,10 @@ const App = () => {
         .then(res => {
           console.log(res);
           setPersons(persons.filter(person => person !== obj));
+        })
+        .catch(err => {
+          alert("Failed to delete the person. This user may already be deleted on the server");
+          console.error(err.message);
         })
     }
   }
