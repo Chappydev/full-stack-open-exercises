@@ -33,6 +33,7 @@ const App = () => {
 
   const handleFormSubmit = e => {
     e.preventDefault();
+
     if (persons.some(person => person.name === newName)) {
       if (window.confirm(`${newName} is already in the phonebook. Do you want to replace the old number with a new one?`)) {
         const existingPerson = persons.find(person => person.name === newName);
